@@ -21,14 +21,14 @@ talks to the Cloud Code Assist streaming API directly, and provides full bilingu
 ### Option 1: Direct from GitHub
 
 ```sh
-dsh plugin --profile web add github:LiZhenNet/dsh-antigravity
+dsh plugin --profile web add github:yyangzhou/dsh-antigravity
 ```
 
 ### Option 2: From Local Release Tarball
 
 ```sh
 npm run pack:dist
-dsh plugin --profile web add ./dist/dsh-antigravity-0.0.4.tgz
+dsh plugin --profile web add ./dist/dsh-antigravity-0.0.5.tgz
 ```
 
 The package declares a DSH bundle patch, so installation automatically mounts
