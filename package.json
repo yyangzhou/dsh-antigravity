@@ -26,7 +26,9 @@
       "dsh": ">=0.1.5-rc.1 <0.3.0",
       "dshReleases": {
         "0.1.5-rc.1": "compatible",
-        "0.2.0-rc.1": "compatible"
+        "0.2.0-rc.1": "compatible",
+        "0.2.0-rc.2": "compatible",
+        "0.2.1-rc.1": "compatible"
       }
     }
   },
@@ -74,15 +76,15 @@
     "undici": "^7.0.0"
   },
   "peerDependencies": {
-    "@deepseek-ai/dsh-home-paths": "^0.1.5-rc.1",
-    "@deepseek-ai/dsh-host-webserver": "^0.1.5-rc.1",
-    "@deepseek-ai/dsh-llm": "^0.1.5-rc.1",
-    "@deepseek-ai/dsh-timeout": "^0.1.5-rc.1"
+    "@deepseek-ai/dsh-home-paths": ">=0.1.5-rc.1 <0.3.0",
+    "@deepseek-ai/dsh-host-webserver": ">=0.1.5-rc.1 <0.3.0",
+    "@deepseek-ai/dsh-llm": ">=0.1.5-rc.1 <0.3.0",
+    "@deepseek-ai/dsh-timeout": ">=0.1.5-rc.1 <0.3.0"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-home-paths": "^0.1.5-rc.1",
-    "@deepseek-ai/dsh-host-webserver": "^0.1.5-rc.1",
-    "@deepseek-ai/dsh-llm": "^0.1.5-rc.1",
-    "@deepseek-ai/dsh-timeout": "^0.1.5-rc.1"
+    "@deepseek-ai/dsh-home-paths": ">=0.1.5-rc.1 <0.3.0",
+    "@deepseek-ai/dsh-host-webserver": ">=0.1.5-rc.1 <0.3.0",
+    "@deepseek-ai/dsh-llm": ">=0.1.5-rc.1 <0.3.0",
+    "@deepseek-ai/dsh-timeout": ">=0.1.5-rc.1 <0.3.0"
   }
 }
