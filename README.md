@@ -110,6 +110,35 @@ The proxy configuration is stored at:
 $DSH_HOME/storages/antigravity-proxy.json
 ```
 
+## Troubleshooting
+
+### `400 ... User location is not supported for the API use.`
+
+Google's Cloud Code API only serves a list of supported countries and inspects the
+request's egress IP (not the account). This error means the proxy exit — or, with
+the plugin proxy disabled, the system route — is in a region Google does not serve.
+It is not a login or credential problem.
+
+- Switch the proxy to an exit in a supported region (US/EU), then retry.
+- The plugin retries this specific refusal twice (alternating the plugin proxy and
+  the system/direct route) before failing; if both routes are refused, the node
+  itself is blocked and must be changed.
+- **Test connection** only probes `oauth2.googleapis.com`, which is not
+  geo-restricted, so it can report success while model calls are refused.
+
+### `429 ... Resource has been exhausted (e.g. check quota).`
+
+This is Google throttling the shared serving pool (common on the free tier at peak
+times), **not** an exhausted personal quota: the account's own quota can read ~100%
+while every model returns this 429.
+
+- The plugin retries it with exponential backoff (1.5s/3s/6s/12s, or the backend's
+  `Retry-After`, capped at 20s) before failing the turn.
+- If it still fails, the error is classified as a rate limit, not as `QUOTA_EXCEEDED`.
+- A genuine personal quota exhaustion looks different — the backend then answers
+  `Individual quota reached. Resets in ...`, which is the only 429 reported as quota
+  reached.
+
 ## Models
 
 After login, select the **Antigravity** provider in DSH's model picker. Use the
@@ -120,6 +149,9 @@ Registered model IDs:
 
 | Model ID | Name | Quota pool |
 |---|---|---|
+| `gemini-4-hydrogen` | Gemini 4 Hydrogen (low/medium/high/xhigh) | Gemini |
+| `gemini-pro-orchestrator` | Orchestrator (Argon) | Gemini |
+| `gemini-4-argon` | Gemini 4 Argon | Gemini |
 | `gemini-3.8-flash` | Gemini 3.8 Flash | Gemini |
 | `gemini-3.7-flash` | Gemini 3.7 Flash | Gemini |
 | `gemini-3.6-flash` | Gemini 3.6 Flash | Gemini |
@@ -129,6 +161,8 @@ Registered model IDs:
 | `gemini-3-flash` | Gemini 3 Flash | Gemini |
 | `gemini-2.5-pro` | Gemini 2.5 Pro | Gemini |
 | `gemini-2.5-flash` | Gemini 2.5 Flash | Gemini |
+| `claude-opus-5-5` | Claude Opus 5.5 (1M context, thinking low/medium/high) | Claude & GPT (3P) |
+| `claude-sonnet-5-5` | Claude Sonnet 5.5 (1M context, thinking low/medium/high) | Claude & GPT (3P) |
 | `claude-opus-4-6` | Claude Opus 4.6 | Claude & GPT (3P) |
 | `claude-sonnet-4-6` | Claude Sonnet 4.6 | Claude & GPT (3P) |
 | `gpt-oss-120b` | GPT-OSS 120B | Claude & GPT (3P) |

@@ -109,6 +109,26 @@ $DSH_HOME/storages/antigravity-proxy.json
 
 ---
 
+## 常见问题
+
+### `400 ... User location is not supported for the API use.`
+
+Google Cloud Code 只对受支持的国家/地区提供服务，并按请求的出口 IP（而不是账号）判定。出现该错误说明代理出口（关闭插件代理时为系统直连路由）位于 Google 不提供服务的地区，**不是登录或凭证问题**。
+
+- 把代理节点切换到受支持地区（美国/欧洲）后重试。
+- 插件会针对该拒绝自动重试 2 次（在「插件代理」与「系统直连」之间交替）；两条路由都被拒绝说明该节点本身已被封禁，需要换节点。
+- 设置页的 **测试连接** 只探测 `oauth2.googleapis.com`（不受地区限制），因此它显示正常时模型调用仍可能被拒。
+
+### `429 ... Resource has been exhausted (e.g. check quota).`
+
+这是 Google 对**共享服务池**的限流（免费档高峰期常见），**不是**你的账号额度用完：此时账号自己的额度条往往还显示接近 100%，但所有模型都返回同一个 429。
+
+- 插件会按指数退避重试该 429（1.5s / 3s / 6s / 12s；后端给了 `Retry-After` 就按它，上限 20s），仍失败才结束本轮。
+- 重试后仍失败时按限流错误（`RATE_LIMIT`）返回，不再误报成「额度已用尽」。
+- 真正用完个人额度时后端返回的是 `Individual quota reached. Resets in …`，那一种才会显示为额度用尽。
+
+---
+
 ## 模型列表
 
 登录后，在 DSH 模型选择器中选择 **Antigravity** 提供商。您可以在 **设置 > Antigravity** 的模型选择器中按需勾选或关闭单个模型（已勾选的模型将自动置顶展示），每个模型副标题均会显示其实时可用额度百分比。
@@ -117,6 +137,9 @@ $DSH_HOME/storages/antigravity-proxy.json
 
 | 模型 ID | 名称 | 额度池 |
 |---|---|---|
+| `gemini-4-hydrogen` | Gemini 4 Hydrogen（low/medium/high/xhigh） | Gemini |
+| `gemini-pro-orchestrator` | Orchestrator (Argon) | Gemini |
+| `gemini-4-argon` | Gemini 4 Argon | Gemini |
 | `gemini-3.8-flash` | Gemini 3.8 Flash | Gemini |
 | `gemini-3.7-flash` | Gemini 3.7 Flash | Gemini |
 | `gemini-3.6-flash` | Gemini 3.6 Flash | Gemini |
@@ -126,6 +149,8 @@ $DSH_HOME/storages/antigravity-proxy.json
 | `gemini-3-flash` | Gemini 3 Flash | Gemini |
 | `gemini-2.5-pro` | Gemini 2.5 Pro | Gemini |
 | `gemini-2.5-flash` | Gemini 2.5 Flash | Gemini |
+| `claude-opus-5-5` | Claude Opus 5.5（1M 上下文，思考档 low/medium/high） | Claude & GPT (3P) |
+| `claude-sonnet-5-5` | Claude Sonnet 5.5（1M 上下文，思考档 low/medium/high） | Claude & GPT (3P) |
 | `claude-opus-4-6` | Claude Opus 4.6 | Claude & GPT (3P) |
 | `claude-sonnet-4-6` | Claude Sonnet 4.6 | Claude & GPT (3P) |
 | `gpt-oss-120b` | GPT-OSS 120B | Claude & GPT (3P) |
