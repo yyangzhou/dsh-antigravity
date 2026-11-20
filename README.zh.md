@@ -138,17 +138,21 @@ Google Cloud Code 只对受支持的国家/地区提供服务，并按请求的�
 | 模型 ID | 名称 | 额度池 |
 |---|---|---|
 | `gemini-4-hydrogen` | Gemini 4 Hydrogen（low/medium/high/xhigh） | Gemini |
+| `gemini-4-neon` | Gemini 4 Neon（low/medium/high/xhigh） | Gemini |
 | `gemini-pro-orchestrator` | Orchestrator (Argon) | Gemini |
+| `gemini-pro-orchestrator-neon` | Orchestrator (Neon) | Gemini |
 | `gemini-4-argon` | Gemini 4 Argon | Gemini |
 | `gemini-3.8-flash` | Gemini 3.8 Flash | Gemini |
 | `gemini-3.7-flash` | Gemini 3.7 Flash | Gemini |
 | `gemini-3.6-flash` | Gemini 3.6 Flash | Gemini |
 | `gemini-3.5-flash` | Gemini 3.5 Flash | Gemini |
+| `gemini-3.5-flash-lite` | Gemini 3.5 Flash Lite | Gemini |
+| `gemini-3.1-flash-lite` | Gemini 3.1 Flash Lite | Gemini |
 | `gemini-3.1-pro` | Gemini 3.1 Pro | Gemini |
 | `gemini-3.1-flash-image` | Gemini 3.1 Flash Image | Gemini |
 | `gemini-3-flash` | Gemini 3 Flash | Gemini |
 | `gemini-2.5-pro` | Gemini 2.5 Pro | Gemini |
-| `gemini-2.5-flash` | Gemini 2.5 Flash | Gemini |
+| `gemini-2.5-flash` | Gemini 2.5 Flash（上游现以 Gemini 3.5 Flash Lite 应答这三个别名） | Gemini |
 | `claude-opus-5-5` | Claude Opus 5.5（1M 上下文，思考档 low/medium/high） | Claude & GPT (3P) |
 | `claude-sonnet-5-5` | Claude Sonnet 5.5（1M 上下文，思考档 low/medium/high） | Claude & GPT (3P) |
 | `claude-opus-4-6` | Claude Opus 4.6 | Claude & GPT (3P) |
@@ -157,7 +161,7 @@ Google Cloud Code 只对受支持的国家/地区提供服务，并按请求的�
 
 同一额度池内的模型共享 5 小时与每周额度。额度按 Token 成本比例扣除，因此较重的大模型（如 Claude Opus）消耗额度速度会快于轻量模型。
 
-插件会在可用时通过实时的 `fetchAvailableModels` 目录将这些公开 ID 解析为内部运行时模型 ID，并自带静态路由兜底。
+插件会在可用时通过实时的 `fetchAvailableModels` 目录将这些公开 ID 解析为内部运行时模型 ID，并自带静态路由兜底。上述清单于 2026-11-20 对照实时目录校对（快照见 `test/fixtures/catalog-2026-11-20.json`，`npm test` 会校验路由与目录是否仍然一致）；已从上游下线但仍被上游重新启用过多次的旧型号（如 3.7 / 3.6 / 3.5 Flash、3.1 Pro、Claude 4.6）保留为静态兜底。
 
 对于支持推理的模型，插件会默认采用中等强度（仅提供 `high` 的模型采用 `high`），显式请求上游返回 thoughts，并把流中的 thoughts 映射为 DSH `reasoning` 内容块；仍可在模型选择器中调整推理等级。
 

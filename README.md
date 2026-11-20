@@ -150,17 +150,21 @@ Registered model IDs:
 | Model ID | Name | Quota pool |
 |---|---|---|
 | `gemini-4-hydrogen` | Gemini 4 Hydrogen (low/medium/high/xhigh) | Gemini |
+| `gemini-4-neon` | Gemini 4 Neon (low/medium/high/xhigh) | Gemini |
 | `gemini-pro-orchestrator` | Orchestrator (Argon) | Gemini |
+| `gemini-pro-orchestrator-neon` | Orchestrator (Neon) | Gemini |
 | `gemini-4-argon` | Gemini 4 Argon | Gemini |
 | `gemini-3.8-flash` | Gemini 3.8 Flash | Gemini |
 | `gemini-3.7-flash` | Gemini 3.7 Flash | Gemini |
 | `gemini-3.6-flash` | Gemini 3.6 Flash | Gemini |
 | `gemini-3.5-flash` | Gemini 3.5 Flash | Gemini |
+| `gemini-3.5-flash-lite` | Gemini 3.5 Flash Lite | Gemini |
+| `gemini-3.1-flash-lite` | Gemini 3.1 Flash Lite | Gemini |
 | `gemini-3.1-pro` | Gemini 3.1 Pro | Gemini |
 | `gemini-3.1-flash-image` | Gemini 3.1 Flash Image | Gemini |
 | `gemini-3-flash` | Gemini 3 Flash | Gemini |
 | `gemini-2.5-pro` | Gemini 2.5 Pro | Gemini |
-| `gemini-2.5-flash` | Gemini 2.5 Flash | Gemini |
+| `gemini-2.5-flash` | Gemini 2.5 Flash (upstream now answers these ids as Gemini 3.5 Flash Lite) | Gemini |
 | `claude-opus-5-5` | Claude Opus 5.5 (1M context, thinking low/medium/high) | Claude & GPT (3P) |
 | `claude-sonnet-5-5` | Claude Sonnet 5.5 (1M context, thinking low/medium/high) | Claude & GPT (3P) |
 | `claude-opus-4-6` | Claude Opus 4.6 | Claude & GPT (3P) |
@@ -173,6 +177,11 @@ drain the pool faster than lighter ones.
 
 The plugin resolves these public IDs to runtime model IDs using the live
 `fetchAvailableModels` catalog when available, with static routing fallbacks.
+The roster above was reconciled against the live catalog on 2026-11-20 (see
+`test/fixtures/catalog-2026-11-20.json`; `npm test` fails if a served family
+routes to a tier the catalog no longer lists). Families that upstream retired but
+re-enabled before (3.7 / 3.6 / 3.5 Flash, 3.1 Pro, Claude 4.6) stay registered as
+static fallbacks.
 
 For reasoning-capable models, the plugin defaults to medium effort (or high when
 that is the only advertised level), explicitly requests upstream thoughts, and
